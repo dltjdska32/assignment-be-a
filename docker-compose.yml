@@ -1,0 +1,60 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: be-a-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "12345"
+      MYSQL_DATABASE: assignment
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # 별도 컨테이너 없이, 이 MySQL 첫 초기화(빈 볼륨) 시에만 실행
+      - ./docker/mysql/init-databases.sql:/docker-entrypoint-initdb.d/01-init-databases.sql:ro
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p12345"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    container_name: be-a-redis
+    command: ["redis-server", "--requirepass", "12345"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "12345", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: be-a-app
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/assignment?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: "12345"
+#      SPRING_DATA_REDIS_HOST: redis
+#      SPRING_DATA_REDIS_PORT: "6379"
+#      SPRING_DATA_REDIS_PASSWORD: "12345"
+#      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-long-random-secret-key-32chars}
+#    depends_on:
+#      mysql:
+#        condition: service_healthy
+#      redis:
+#        condition: service_healthy
+
+volumes:
+  mysql_data:

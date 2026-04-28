@@ -1,0 +1,44 @@
+logging:
+  level:
+    root: INFO
+
+
+spring:
+  application:
+    name: be-a
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/assignment?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:12345}
+
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    defer-datasource-initialization: false
+    show-sql: false
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:12345}
+
+
+
+jwt:
+  secret: ${JWT_SECRET:test-test-test-test-test-test-123-444-12-k!@3-*@(!-$(ks}
+  access-expiration: 1800000  # 30분 (밀리초)
+  refresh-expiration: 604800000 # 7일 = 7 * 24 * 60 * 60 * 1000
+
+  key:
+    invalid-token-code: INVALID_TOKEN
+    expired-token-code: EXPIRED_TOKEN

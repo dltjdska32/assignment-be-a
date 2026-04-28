@@ -1,0 +1,37 @@
+# 테스트 실행 시 spring.profiles.active=test (테스트 클래스의 @ActiveProfiles 등)
+# `assignment_test`: docker compose 의 mysql 서비스가 첫 기동 시 docker/mysql/init-databases.sql 로 생성 (빈 볼륨일 때만).
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/assignment_test?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:12345}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        default_batch_fetch_size: 100
+    show-sql: false
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:12345}
+
+jwt:
+  secret: ${JWT_SECRET:test-test-test-test-test-test-123-444-12-k!@3-*@(!-$(ks}
+  access-expiration: 1800000
+  refresh-expiration: 604800000
+  key:
+    invalid-token-code: INVALID_TOKEN
+    expired-token-code: EXPIRED_TOKEN
+
+logging:
+  level:
+    root: WARN
