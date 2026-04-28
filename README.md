@@ -16,8 +16,26 @@
 # 레포지토리 클론
 git clone https://github.com/dltjdska32/assignment-be-a.git
 
+
+# 인프라 환경 설정.
+.env 생성
+-> docker-compose.yml에 DB관련 변수 설정 : default값을 통해 docker-compose up -d 를 해도 실행이되지만
+   개인 DB 설정을 원할경우 해당 .env파일에 값을 선언해야합니다.
+
+## .evn 설정예시
+SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/assignment_test?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+SPRING_DATASOURCE_USERNAME=root
+SPRING_DATASOURCE_PASSWORD=12345
+SPRING_DATA_REDIS_HOST=localhost
+SPRING_DATA_REDIS_PORT=6379
+SPRING_DATA_REDIS_PASSWORD=12345
+JWT_SECRET=test-test-test-test-test-test-123-444-12-k!@3-*@(!-$(ks
+ 
+
+
 # 인프라 환경 구축 (MySQL, Redis)
 docker-compose up -d
+
 
 
 # 빌드 및 실행 명령어
